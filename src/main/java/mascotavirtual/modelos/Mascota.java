@@ -43,9 +43,12 @@ public class Mascota {
     protected String actaDefuncion;
     protected String actaNacimiento;
     
-    
+    //Método constructor vacío
+    public Mascota(){
+    }
     
     //método constructor que requiere dos datos al momento de la instaciacion: nombre y propietario
+    
     
     public Mascota(String nombre, String propietario) {
         setId(id);            

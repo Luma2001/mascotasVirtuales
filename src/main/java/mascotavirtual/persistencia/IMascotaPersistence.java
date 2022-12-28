@@ -1,6 +1,7 @@
 
 package mascotavirtual.persistencia;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import mascotavirtual.modelos.Mascota;
@@ -15,9 +16,9 @@ public interface IMascotaPersistence {
     //Métodos abstratos: se define solo la firma del método, no tienen cuerpo
     //Las interfaces sólo pueden tener métodos abstratos y constantes.
     void guardar(Mascota mascota);
+    List<Mascota> getMascota(String propietario, Boolean isLive);
     Mascota getMascota(int id);
-    Mascota getMascota(String nombre);
-    /*Mascota getMascota(String propietario*/
+    Mascota getMascota(String nombre, String propietario);
     List<Mascota> getAllMascotas();
     void updateMascota(int id, Mascota mascota);
     void deleteMascota(int id);

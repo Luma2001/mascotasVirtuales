@@ -12,46 +12,130 @@ import mascotavirtual.persistencia.mysql.MySQLConnection;
 import mascotavirtual.persistencia.persistenceCollections.MascotaPersistenceUseList;
 import mascotavirtual.utils.actas.RegistroCivilMascotas;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import mascotavirtual.persistencia.mysql.MascotaPersistenceUseMySQL;
 
 
 public class MascotasVirtuales {
 
     public static void main(String[] args) {
+       
         MySQLConnection conexion = new MySQLConnection();
         
         Connection connection = conexion.establecerConexion();
+      //conexion.crearTabla(); //funciona ok
         conexion.cerrarConexion(connection);
         
+               
+    
         
         
         /*
-        MascotaPersistenceUseList persistence = new MascotaPersistenceUseList();
-
-        DukeMascot duke01= new DukeMascot("Duke-Merlina", "Semper");
+       */ 
+       //Creamos mascotas Duke
+        DukeMascot duke01= new DukeMascot("Merlina", "Semper");
         DukeMascot duke02 = new DukeMascot("Moro","Luma");
         DukeMascot duke03 = new DukeMascot("Laika", "Luna");
-        DukeMascot duke04 = new DukeMascot("Teo", "Marce");
-                                
+        DukeMascot duke08 = new DukeMascot("Teo", "Marce");
+        DukeMascot duke09 = new DukeMascot("Aurelio", "Omar");
+        DukeMascot duke10 = new DukeMascot("Belle", "Javier");
+        DukeMascot duke11 = new DukeMascot("Luca","Javier");
+        
+        
+        //Creamos objeto de MascotaPersistenceUseList
+        MascotaPersistenceUseList persistence = new MascotaPersistenceUseList();
+                                       
         //guardamos los datos de los objetos creados
         persistence.guardar(duke01);
         persistence.guardar(duke02);
         persistence.guardar(duke03);
-        persistence.guardar(duke04);
+        persistence.guardar(duke08);
+        persistence.guardar(duke09);
+        persistence.guardar(duke10);
+        persistence.guardar(duke11);
         
-                                                                        
-        //Recorremos lista para verificar que los datos se hayan guardado correctamente.
+        //Creamos objeto de MascotaPersistenceUseMySQL
+        MascotaPersistenceUseMySQL persistenceUseBDMySQL = new MascotaPersistenceUseMySQL();
+        //Guardamos registros en la tabla creada en línea 27
+        //persistenceUseBDMySQL.guardar(duke01);
+        //persistenceUseBDMySQL.guardar(duke02);
+        //persistenceUseBDMySQL.guardar(duke03);
+        //persistenceUseBDMySQL.guardar(duke08);
+        //persistenceUseBDMySQL.guardar(duke09);
+        //persistenceUseBDMySQL.guardar(duke10);
+        //persistenceUseBDMySQL.guardar(duke11);
+      
+        /*
+        //Leemos un registro(funciona ok)
+        Mascota mascota = persistenceUseBDMySQL.getMascota(4);
+        
+        System.out.println("Consulta datos de Mascota"
+                + "\n Nombre: " +mascota.getNombre()
+                + "\n Fecha de Nacimiento: " + mascota.getFechaNacimiento()
+                + "\n Propietario: " + mascota.getPropietario()
+                + "\n Está vivo?: " + mascota.getIsLive());
+        */
+        
+        
+        //Leemos niveles de una mascota. No Funciona
+        Mascota mascota= persistenceUseBDMySQL.getMascota("Merlina", "Semper");
+        System.out.println("Los niveles de la mascota, son:"
+                + "\n Nivel de Energia: " + mascota.getNivelEnergia()
+                + "\n Nivel de Hambre: " + mascota.getNivelHambre()
+                + "\n Nivel de Sed: " + mascota.getNivelSed()
+                + "\n Nivel de Cansancio: " + mascota.getNivelCansancio() 
+                + "\n Nivel de Felicidad: " + mascota.getNivelFelicidad()
+                + "\n Nivel de Aburrimieto: " + mascota.getNivelAburrimiento());
+                
+        
+        
+        
+       
+        
+        
+        
+        
+        
+        //Otra lectura de registro (me da error)
+        
+        //Intento uno
+        //List<Mascota> mascota = persistenceUseBDMySQL.getMascota("Luna", Boolean.TRUE);
+        //System.out.println(mascota);
+       /*
+        System.out.println("Consulta nivel de felicidad de mascotas pertenecientes a " + mascota.getPropietario()
+                + "\n Nombre:  " + mascota.getNombre()
+                + "\n Nivel de Felicidad: " + mascota.getNivelFelicidad());
+       
+        //Intento dos
+       for(Mascota mascota : persistenceUseBDMySQL.getMascota("Javier",Boolean.TRUE)){
+            System.out.println(mascota);
+        }*/
+        
+        
+        
+         //Borramos un registro de la tabla(funciona ok)
+        //persistenceUseBDMySQL.deleteMascota(2);
+        
+        
+         /*                                                               
+        //Recorremos lista para verificar que los datos se hayan guardado correctamente.Funciona ok
         
         for(Mascota mascota : persistence.getAllMascotas()){
             System.out.println(mascota);
         }
+        */
         
-        //Recorremos lista, pero solo accedemos a los nombres de las mascotas
-        
+       
+        //Recorremos lista, pero solo accedemos a los nombres de las mascotas. funciona ok
+        /*
         System.out.println("Lista completa de nombres de las mascotas:");
         for(Mascota mascota : persistence.getAllMascotas()){
             System.out.println(mascota.getNombre());
         }
         
+        
+        //Creamos actas de las mascotas
           RegistroCivilMascotas.confeccionarActa(duke01);
           RegistroCivilMascotas.confeccionarActa(duke02);
           RegistroCivilMascotas.confeccionarActa(duke03);
@@ -64,17 +148,21 @@ public class MascotasVirtuales {
           
           
         
+        
         //Enviamos el mensaje de comer a una de las mascotas
-        System.out.println("Veamos el nivel de energía de " + duke01.getNombre());
-        System.out.println("Antes de comer " + duke01.getNivelEnergia());
-        System.out.println(duke01.getNombre() + "a comer.");
-        duke01.comer(AlmacenAlimentos.ASADO);
-        duke01.comer(AlmacenAlimentos.PORORO);
-        duke01.comer(AlmacenAlimentos.PORORO);
-        duke01.comer(AlmacenAlimentos.PORORO);
-        duke01.comer(AlmacenAlimentos.PORORO);
+        System.out.println("Veamos el nivel de energía de " + duke11.getNombre());
+        System.out.println("Antes de comer " + duke11.getNivelEnergia());
+        System.out.println(duke11.getNombre() + " a comer.");
+        
+        duke11.comer(AlmacenAlimentos.ASADO);
+        duke11.comer(AlmacenAlimentos.PORORO);
+        duke11.comer(AlmacenAlimentos.PORORO);
+        duke11.comer(AlmacenAlimentos.PORORO);
+        duke11.comer(AlmacenAlimentos.PORORO);
+        */
         
         
+        /*
         duke02.jugar(EntretenimientosEnum.ADIVINAR);
         duke02.jugar(EntretenimientosEnum.BAILAR);
         duke02.jugar(EntretenimientosEnum.CAZAR);
@@ -116,11 +204,6 @@ public class MascotasVirtuales {
         duke01.irAOrinar();
         
         */
-        
-        
-        
-        
-        
         
         
         /*

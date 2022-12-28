@@ -19,29 +19,16 @@ public class MascotaPersistenceUseList implements IMascotaPersistence{
     }
 
     @Override
-    public Mascota getMascota(String nombre) {
+    public Mascota getMascota(String nombre, String propietario) {
         for (Mascota elemento : bdMascotas){
-            if(elemento.getNombre().equals(nombre)){
+            if(elemento.getNombre().equals(nombre) && elemento.getPropietario().equals(propietario)){
               return elemento;      
             }
         }
         return null;
     }  
-    
-   /*
-    @Override
-    public Mascota getMascota(String propietario, int nivelFelicidad) {
-        for (Mascota elemento : bdMascotas){
-            if(elemento.getPropietario().equals(propietario)){
-              return mascota.getNivelFelicidad && elemento;     
-            }
-        }
-        return null;
-    }
-*/
-   
-    
-    @Override
+  
+     @Override
     //recuperamos los datos de la base de datos
     public List<Mascota> getAllMascotas() {
         return bdMascotas;                     
@@ -56,6 +43,10 @@ public class MascotaPersistenceUseList implements IMascotaPersistence{
     public void deleteMascota(int id) {
         bdMascotas.remove(getMascota(id));
     }
-    
-}
-                 
+
+    @Override
+    public List<Mascota> getMascota(String propietario, Boolean isLive) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    }
+       
