@@ -92,52 +92,88 @@ public class MascotaPersistenceUseMySQL implements IMascotaPersistence {
           }
     
     
-    @Override//no presenta error, pero no funciona
-    public List<Mascota> getMascota(String propietario, Boolean isLive) {
-       String query = "SELECT nombre, nivelFelicidad FROM infomascota WHERE propietario = ? && isLive=true";
-            
-                // Crear un objeto PreparedStatement
-            PreparedStatement stm = mySQLConnection.enviarConsulta(this.connection, query);
-            
-            
-            
-            try{
-                stm.setString(1, propietario);
-                stm.setBoolean(2,isLive);
-                
-                // Ejecutar la instrucción SQL y obtener el resultado
-                ResultSet rs = stm.executeQuery();
-                // Verificar si se obtuvo un registro
-                List mascota = new ArrayList<>();
-                    while (rs.next()) {
-                        mascota.add(rs.getInt("nivelFelicidad"), rs.getString("nombre"));
-                       
-                        //Devolver el ARRAY
-
-                         return mascota;
-                    }
-            
-            }catch (SQLException e) {
-                System.out.println("Error, no se han podido mostrar registros");
-            }
-
-            return null;             
-            
-            
-        
-    }         
-
-   
+     @Override//Funciona ok
     
-    
-    @Override //no funciona
     public Mascota getMascota(String nombre, String propietario) {
-    String query = "SELECT propietario, fechaNacimiento, isLive,  FROM infomascota WHERE nombre = ? && propietario=?";
+                        
+            String query = "SELECT * FROM infomascota WHERE nombre = ? AND propietario = ?";
+            
             // Crear un objeto PreparedStatement
             PreparedStatement stm = mySQLConnection.enviarConsulta(this.connection, query);
             try{
                 stm.setString(1, nombre);
-                //stm.setString(2, propietario);
+                stm.setString(2, propietario);
+                
+                // Ejecutar la instrucción SQL y obtener el resultado
+            ResultSet rs = stm.executeQuery();
+                // Verificar si se obtuvo un registro
+            if (rs.next()) {
+                // Crear un objeto Msacota y establecer sus valores
+            Mascota mascota = new Mascota();
+                mascota.setId(rs.getInt("id"));
+                mascota.setNombre(rs.getString("nombre"));
+                mascota.setPropietario(rs.getString("propietario"));                               
+                mascota.setIsLive(rs.getBoolean("isLive"));
+                mascota.setNivelEnergia(rs.getInt("nivelEnergia"));          
+                mascota.setNivelHambre(rs.getInt("nivelHambre"));
+                mascota.setNivelSed(rs.getInt("nivelSed"));
+                mascota.setNivelCansancio(rs.getInt("nivelCansancio"));
+                mascota.setNivelFelicidad(rs.getInt("nivelFelicidad"));
+                mascota.setNivelAburrimiento(rs.getInt("nivelAburrimiento"));
+                // Devolver el objeto Mascota
+
+                 return mascota;}
+            
+            }catch (SQLException e) {
+                System.out.println("Error, no se ha podido mostrar registro");
+            }
+
+            return null;
+          }
+    
+    
+    
+    @Override//funciona ok
+    public List<Mascota> getMascota(String propietario, Boolean isLive) {
+       
+                
+      String query = "SELECT nombre, nivelFelicidad FROM infomascota WHERE propietario = ? AND isLive=?";
+            
+                // Crear un objeto PreparedStatement
+      PreparedStatement stm = mySQLConnection.enviarConsulta(this.connection, query);
+      List listaMascotas = new ArrayList<>();
+      try{
+
+        stm.setString(1, propietario);
+        stm.setBoolean(2, isLive);
+                
+        // Ejecutar la instrucción SQL y obtener el resultado
+        ResultSet rs = stm.executeQuery();
+        // Verificar si se obtuvo un registro
+
+        while (rs.next()) {
+          listaMascotas.add(rs.getInt("nivelFelicidad"));
+          listaMascotas.add(rs.getString("nombre"));
+        }
+
+      }catch (SQLException e) {
+        System.out.println("Error, no se han podido mostrar registros");
+      }
+
+      return listaMascotas;
+     
+    }         
+
+    
+    /*
+    @Override //funciona ok
+    public Mascota getMascota(String nombre, String propietario) {
+    String query = "SELECT nivelEnergia, nivelHambre, nivelSed, nivelCansancio, nivelFelicidad, nivelAburrimiento  FROM infomascota WHERE nombre = ? && propietario=?";
+            // Crear un objeto PreparedStatement
+            PreparedStatement stm = mySQLConnection.enviarConsulta(this.connection, query);
+            try{
+                stm.setString(1, nombre);
+                stm.setString(2, propietario);
                 
                 // Ejecutar la instrucción SQL y obtener el resultado
             ResultSet rs = stm.executeQuery();
@@ -162,25 +198,66 @@ public class MascotaPersistenceUseMySQL implements IMascotaPersistence {
             }
 
             return null;
-    }
+    }*/
 
-    @Override
+    
+    
+    @Override//Funciona Ok
     public List<Mascota> getAllMascotas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String query = "SELECT * FROM infomascota";
+        List<Mascota> listaCompleta = new ArrayList<>(); 
+                // Crear un objeto PreparedStatement
+      PreparedStatement stm = mySQLConnection.enviarConsulta(this.connection, query);
+      
+      
+      try{
+    
+        // Ejecutar la instrucción SQL y obtener el resultado
+        //ResultSet nos permite contener toda la información que traemos de la base de datos
+        ResultSet rs = stm.executeQuery();
+        // Verificar si se obtuvo un registro
+
+        while (rs.next()) {
+          Mascota mascota = new Mascota();
+          mascota.setId(rs.getInt("id"));
+          mascota.setNombre(rs.getString("nombre"));
+          mascota.setPropietario(rs.getString("propietario"));
+          mascota.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate().atTime(LocalTime.ofSecondOfDay(new Random().nextInt(86400))));
+          mascota.setIsLive(rs.getBoolean("isLive"));
+          mascota.setNivelEnergia(rs.getInt("nivelEnergia"));          
+          mascota.setNivelHambre(rs.getInt("nivelHambre"));
+          mascota.setNivelSed(rs.getInt("nivelSed"));
+          mascota.setNivelCansancio(rs.getInt("nivelCansancio"));
+          mascota.setNivelFelicidad(rs.getInt("nivelFelicidad"));
+          mascota.setNivelAburrimiento(rs.getInt("nivelAburrimiento"));
+          
+          listaCompleta.add(mascota);
+         
+        }
+        stm.close();
+    
+      }catch (SQLException e) {
+        System.out.println("Error, no se han podido mostrar registros");
+      }
+
+      return listaCompleta;
     }
     
 
-    @Override
+    
+    @Override//escribimos el método,
+    //La idea de que después de comer, divertirse, etc llamar al método para actualizar los valores
     public void updateMascota(int id, Mascota mascota) {
-        
-            try {
-            // Crear una instrucción SQL UPDATE
-            String sql = "UPDATE infomascota SET fechaMuerte = ?, isLive = ?, nivelEnergia = ?, nivelHambre = ?, nivelSed = ?, nivelCansancio = ?, nivelFelicidad = ?, nivelAburrimiento = ? WHERE id = ?";
+        // Crear una instrucción SQL UPDATE
+            String sql = "UPDATE infomascota SET  isLive = ?, nivelEnergia = ?, nivelHambre = ?, nivelSed = ?, nivelCansancio = ?, nivelFelicidad = ?, nivelAburrimiento = ? WHERE id = ?";
             // Crear un objeto PreparedStatement
             PreparedStatement stm = mySQLConnection.enviarConsulta(this.connection, sql);
             
+            try {
+            stm.setInt(1, id);
+            
             // Establecer los valores de los parámetros
-            stm.setString(1, mascota.getFechaMuerte() != null ? mascota.getFechaMuerte().toString() : null);
+            //stm.setString(1, elegida.getFechaMuerte() != null ? elegida.getFechaMuerte().toString() : null);
             stm.setBoolean(2, mascota.getIsLive());
             stm.setInt(3, mascota.getNivelEnergia());
             stm.setInt(4, mascota.getNivelHambre());
@@ -200,7 +277,8 @@ public class MascotaPersistenceUseMySQL implements IMascotaPersistence {
             }
           }
 
-    @Override
+    
+    @Override //funciona ok
     public void deleteMascota(int id) {
         try {
         //Crear una instrucción SQL DELETE. 
@@ -220,9 +298,5 @@ public class MascotaPersistenceUseMySQL implements IMascotaPersistence {
     
     }
 
-    
-
-    
-   
     
 }

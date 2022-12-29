@@ -44,9 +44,13 @@ public class MascotaPersistenceUseList implements IMascotaPersistence{
         bdMascotas.remove(getMascota(id));
     }
 
+   
+    
     @Override
     public List<Mascota> getMascota(String propietario, Boolean isLive) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    
     }
        
