@@ -12,7 +12,6 @@ public class Divertirse {
             int nivelOriginal = mascota.getNivelAburrimiento();
             if(nivelOriginal!=0){
                 mascota.setNivelAburrimiento (mascota.getNivelAburrimiento() - entretenimiento.getDesaburrimiento());
-                mascota.setNivelAburrimiento (mascota.getNivelFelicidad() + entretenimiento.getDesaburrimiento());
                 aumentarHambre(mascota);
                 disminuirEnergia(mascota);
                 aumentarCansancio(mascota);

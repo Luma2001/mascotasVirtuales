@@ -55,13 +55,13 @@ public class Mascota {
         setPropietario(propietario);
         setIsLive(true);
         setNivelEnergia(50);
-        setNivelHambre(100);
+        setNivelHambre(99);
         setNivelSed((int) (Math.random() * 100));
         setNivelCansancio((int) (Math.random() * 100));
         setNivelFelicidad((int) (Math.random() * 100));
         setNivelAburrimiento((int) (Math.random() * 100));
         setFechaNacimiento(LocalDateTime.now());
-        this.alimentarse= new Alimentarse();
+        this.alimentarse = new Alimentarse();
         this.hidratarse = new Hidratarse();
         this.divertirse = new Divertirse();
         this.descansar = new Dormir();
@@ -86,10 +86,12 @@ public class Mascota {
     }
     
     public void dormir(LocalTime tiempo){
-        descansar.hacerDormir(tiempo, this);};
+        descansar.hacerDormir(tiempo, this);
+    }
     
     public void jugar(EntretenimientosEnum entretenimiento){
-        divertirse.entretenerseCon(entretenimiento, this);}
+        divertirse.entretenerseCon(entretenimiento, this);
+    }
     
     public void irAlBaño(){
         popo.evacuar(this);

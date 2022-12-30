@@ -108,8 +108,9 @@ public class MascotaPersistenceUseMySQL implements IMascotaPersistence {
             ResultSet rs = stm.executeQuery();
                 // Verificar si se obtuvo un registro
             if (rs.next()) {
-                // Crear un objeto Msacota y establecer sus valores
+                // Crear un objeto Mascota y establecer sus valores
             Mascota mascota = new Mascota();
+                
                 mascota.setId(rs.getInt("id"));
                 mascota.setNombre(rs.getString("nombre"));
                 mascota.setPropietario(rs.getString("propietario"));                               

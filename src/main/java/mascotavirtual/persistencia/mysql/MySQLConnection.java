@@ -57,7 +57,7 @@ public class MySQLConnection {
              stmt.executeUpdate();
              stmt.close();
         }catch (SQLException e) {
-            System.out.println("ERROR.No se ha podido crear tabla.");
+            System.out.println("ERROR. No se ha podido crear tabla.");
         }
       return null;
     }

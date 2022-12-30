@@ -23,7 +23,7 @@ public class Alimentarse {
                     if(mascota.getPopo().tieneQueEvacuar(mascota)){
                         mascota.setNivelEnergia(mascota.getNivelEnergia()-15);
                         mascota.setNivelFelicidad(mascota.getNivelFelicidad() - 10);
-                        System.out.println("Se siente mal su energía desciende a " + mascota.getNivelEnergia());
+                        System.out.println("Se siente mal, su energía desciende a " + mascota.getNivelEnergia());
                         Morir.checkStatusGeneral(mascota);
                         if(mascota.getIsLive()){
                             System.out.println("Esta mascota necesita ir al baño.");

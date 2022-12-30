@@ -3,7 +3,6 @@
 package com.becreative.mascotasvirtuales;
 
 import java.time.LocalTime;
-import mascotavirtual.enumeradores.AlmacenAlimentos;
 import mascotavirtual.enumeradores.AlmacenBebidas;
 import mascotavirtual.enumeradores.EntretenimientosEnum;
 import mascotavirtual.modelos.DukeMascot;
@@ -14,6 +13,7 @@ import mascotavirtual.utils.actas.RegistroCivilMascotas;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import mascotavirtual.enumeradores.AlmacenAlimentos;
 import mascotavirtual.persistencia.mysql.MascotaPersistenceUseMySQL;
 
 
@@ -25,7 +25,7 @@ public class MascotasVirtuales {
         
         Connection connection = conexion.establecerConexion();
       //conexion.crearTabla(); //funciona ok
-        conexion.cerrarConexion(connection);
+        
         
         
         
@@ -43,7 +43,7 @@ public class MascotasVirtuales {
         
         //Creamos objeto de MascotaPersistenceUseList*/
         
-        MascotaPersistenceUseList persistence = new MascotaPersistenceUseList();
+        //MascotaPersistenceUseList persistence = new MascotaPersistenceUseList();
                                        
         //guardamos los datos de los objetos creados
         
@@ -82,29 +82,59 @@ public class MascotasVirtuales {
         
         
         //Leemos niveles de una mascota. (Funciona ok)
-        Mascota elegida= persistenceUseBDMySQL.getMascota("Merlina", "Semper");
+        Mascota elegida = persistenceUseBDMySQL.getMascota("Moro", "Luma");
         System.out.println("Los niveles de la mascota " + elegida.getNombre() + ", cuyo dueño es " + elegida.getPropietario() + ", son:"
                 + "\n Nivel de Energia: " + elegida.getNivelEnergia()
                 + "\n Nivel de Hambre: " + elegida.getNivelHambre()
                 + "\n Nivel de Sed: " + elegida.getNivelSed()
                 + "\n Nivel de Cansancio: " + elegida.getNivelCansancio() 
                 + "\n Nivel de Felicidad: " + elegida.getNivelFelicidad()
-                + "\n Nivel de Aburrimiento: " + elegida.getNivelAburrimiento());
+                + "\n Nivel de Aburrimiento: " + elegida.getNivelAburrimiento()
+                + "\n Está viva?: " + elegida.getIsLive()
+                + "\n ID N° " + elegida.getId()
+                + "\n");
          
+        DukeMascot mascota = new DukeMascot(elegida.getNombre(),elegida.getPropietario());
+        mascota.setId(elegida.getId());
+        mascota.setNivelEnergia(elegida.getNivelEnergia());
+        mascota.setNivelHambre(elegida.getNivelHambre());
+        mascota.setNivelSed(elegida.getNivelSed());
+        mascota.setNivelCansancio(elegida.getNivelCansancio());
+        mascota.setNivelFelicidad(elegida.getNivelFelicidad());
+        mascota.setNivelAburrimiento(elegida.getNivelAburrimiento());
+        mascota.setIsLive(elegida.getIsLive());
         
         
-        persistence.guardar(elegida);
-        elegida.jugar(EntretenimientosEnum.ADIVINAR);
+        
+        mascota.comer(AlmacenAlimentos.ASADO);
+        mascota.jugar(EntretenimientosEnum.ADIVINAR);
+        mascota.comer(AlmacenAlimentos.ASADO);
+        mascota.comer(AlmacenAlimentos.PORORO);
+        mascota.beber(AlmacenBebidas.AGUA);
+        mascota.irAOrinar();
+        
+        
+        System.out.println("Los niveles de la mascota " + mascota.getNombre() + ", cuyo dueño es " + mascota.getPropietario() + ", son:"
+                + "\n Nivel de Energia: " + mascota.getNivelEnergia()
+                + "\n Nivel de Hambre: " + mascota.getNivelHambre()
+                + "\n Nivel de Sed: " + mascota.getNivelSed()
+                + "\n Nivel de Cansancio: " + mascota.getNivelCansancio() 
+                + "\n Nivel de Felicidad: " + mascota.getNivelFelicidad()
+                + "\n Nivel de Aburrimiento: " + mascota.getNivelAburrimiento()
+                + "\n Está viva?: " + mascota.getIsLive()
+                + "\n ID N° " + mascota.getId()
+                + "\n");
         
         
         
         
-        //Actualizando Registro. Funciona Ok
-        persistenceUseBDMySQL.updateMascota(3,elegida);
+        //Actualizando Registro. (Funciona Ok)
+        persistenceUseBDMySQL.updateMascota(4, mascota);
+        
        
                
         
-     /*       
+     /*   (funciona ok)    
     //Lectura Nivel de Felicidad de mascotas pertenecientes a un propietario
     List listaMascotas = persistenceUseBDMySQL.getMascota("Luna", true);
     for (Object dato : listaMascotas) {
@@ -112,7 +142,7 @@ public class MascotasVirtuales {
     }
         
         
-    //Solicitamos lista completa de la base de datos
+    //Solicitamos lista completa de la base de datos_(funciona ok)
     List <Mascota> mascotasDeBD = persistenceUseBDMySQL.getAllMascotas();
     for (Mascota mascota : mascotasDeBD) {
         System.out.println("Los datos de " + mascota.getNombre() + ", son:"
@@ -235,5 +265,8 @@ public class MascotasVirtuales {
         System.out.println(duke01);
         */
 
+        
+        
+        conexion.cerrarConexion(connection);
     }
 }
